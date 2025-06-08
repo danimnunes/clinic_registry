@@ -1,0 +1,38 @@
+CREATE TABLE role (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE user (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE user_roles (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (role_id) REFERENCES role(id)
+);
+
+CREATE TABLE patient (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    birth_date DATE NOT NULL,
+    diagnosis VARCHAR(255),
+    hospital VARCHAR(100),
+    active BOOLEAN DEFAULT TRUE
+);
+
+INSERT INTO role (name) VALUES ('ROLE_ADMIN'), ('ROLE_DOCTOR');
+
+-- user "admin" with (BCrypt) password "admin123"
+INSERT INTO user (username, password) VALUES ('admin', '$2a$10$7qPZf1gqg.Y9Z.K8Bl0t3eJke3sUd/D9mLDc1uRI0R0BicM3VWj/G');
+
+INSERT INTO user_roles (user_id, role_id) VALUES (1, 1); -- admin with ROLE_ADMIN
+
+INSERT INTO patient (name, birth_date, diagnosis, hospital, active)
+VALUES ('Maria Silva', '2015-06-01', 'Doença crónica rara', 'Hospital Santa Maria', true);

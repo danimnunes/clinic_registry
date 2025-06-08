@@ -1,0 +1,12 @@
+services:
+  postgres:
+    image: postgis/postgis:latest
+    environment:
+      - 'POSTGRES_DB=crdb'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=dan'
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
