@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import api from '../api/api';
 import LogoutButton from '../components/LogoutButton';
+import { Button } from '@mui/material';
 import RequireRole from '../components/RequireRole';
+import { useNavigate } from 'react-router-dom';
 import {
   Typography,
   Container,
@@ -23,12 +25,18 @@ import {
 } from '@mui/material';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState('');
 
   const [filterName, setFilterName] = useState('');
   const [filterDiagnosis, setFilterDiagnosis] = useState('');
+
+  const [filterCategory, setFilterCategory] = useState('');
+  const [diagnosisCategories, setDiagnosisCategories] = useState([]);
+
   const [filterHospital, setFilterHospital] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
@@ -41,6 +49,7 @@ export default function Dashboard() {
 
     if (filterName.trim() !== '') params.append('name', filterName.trim());
     if (filterDiagnosis.trim() !== '') params.append('diagnosis', filterDiagnosis.trim());
+    if (filterCategory.trim() !== '') params.append('diagnosis_category', filterCategory.trim());
     if (filterHospital.trim() !== '') params.append('hospital', filterHospital.trim());
     if (filterStatus === 'active') params.append('status', 'active');
     else if (filterStatus === 'inactive') params.append('status', 'inactive');
@@ -56,11 +65,36 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  }, [filterName, filterDiagnosis, filterHospital, filterStatus]);
+  }, [filterName, filterDiagnosis, filterCategory, filterHospital, filterStatus]);
+
+  const clearFilters = () => {
+    setFilterName('');
+    setFilterDiagnosis('');
+    setFilterCategory('');
+    setFilterHospital('');
+    setFilterStatus('');
+  };
 
   useEffect(() => {
     fetchPatients();
   }, [fetchPatients]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await api.get('/patients/diagnosis-categories', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setDiagnosisCategories(response.data);
+      } catch (error) {
+        console.error('Failed to load diagnosis categories:', error);
+      }
+    };
+  
+    fetchCategories();
+  }, []);
+  
 
   const calculateAge = (bDate) => {
     if (!bDate) return 'N/A';
@@ -126,6 +160,21 @@ export default function Dashboard() {
             variant="outlined"
             size="small"
           />
+          <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
+            <InputLabel>Diagnosis Category</InputLabel>
+            <Select
+              label="Diagnosis Category"
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+            >
+              <MenuItem value="">All</MenuItem>
+              {diagnosisCategories.map((diagnosis_category) => (
+                <MenuItem key={diagnosis_category} value={diagnosis_category}>
+                  {diagnosis_category}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
             <InputLabel>Status</InputLabel>
             <Select
@@ -138,6 +187,26 @@ export default function Dashboard() {
               <MenuItem value="inactive">Inactive</MenuItem>
             </Select>
           </FormControl>
+
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={clearFilters}
+            >
+              Clear All
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="flex-end" mb={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate('/statistics')}
+            >
+              View Statistics
+            </Button>
+          </Box>
+
         </Box>
 
         {loading ? (
@@ -154,6 +223,7 @@ export default function Dashboard() {
                   <TableCell><strong>Name</strong></TableCell>
                   <TableCell><strong>Age</strong></TableCell>
                   <TableCell><strong>Diagnosis</strong></TableCell>
+                  <TableCell><strong>Diagnosis Category</strong></TableCell>
                   <TableCell><strong>Hospital</strong></TableCell>
                   <TableCell><strong>Status</strong></TableCell>
                 </TableRow>
@@ -164,6 +234,7 @@ export default function Dashboard() {
                     <TableCell>{patient.name}</TableCell>
                     <TableCell>{calculateAge(patient.birthDate)} years</TableCell>
                     <TableCell>{patient.diagnosis}</TableCell>
+                    <TableCell>{patient.diagnosis_category}</TableCell>
                     <TableCell>{patient.hospital}</TableCell>
                     <TableCell>{patient.active ? 'Active' : 'Inactive'}</TableCell>
                   </TableRow>

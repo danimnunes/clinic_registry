@@ -26,6 +26,7 @@ CREATE TABLE patient (
     name VARCHAR(100) NOT NULL,
     birth_date DATE NOT NULL,
     diagnosis VARCHAR(255),
+    diagnosis_category VARCHAR(100),
     hospital VARCHAR(100),
     active BOOLEAN DEFAULT TRUE
 );
@@ -45,32 +46,33 @@ INSERT INTO user_roles (cr_user_id, role_id) VALUES (1, 1); -- admin with ROLE_A
 INSERT INTO user_roles (cr_user_id, role_id) VALUES (2, 2); -- doctor1 with ROLE_DOCTOR
 INSERT INTO user_roles (cr_user_id, role_id) VALUES (3, 2); -- doctor2 with ROLE_DOCTOR
 
-INSERT INTO patient (name, birth_date, diagnosis, hospital, active)
-VALUES 
-  ('Maria Silva', '2015-06-01', 'Doença crónica rara', 'Hospital Santa Maria', true),
-  ('João Pereira', '2010-09-15', 'Asma moderada', 'Hospital São João', true),
-  ('Ana Costa', '2012-03-22', 'Diabetes tipo 1', 'Hospital da Luz', true),
-  ('Carlos Nogueira', '2008-11-03', 'Epilepsia', 'Hospital Santa Maria', false),
-  ('Rita Lopes', '2016-07-29', 'Alergia alimentar grave', 'Hospital Pediátrico de Coimbra', true),
-  ('Tiago Fernandes', '2014-01-05', 'Doença autoimune rara', 'Hospital de Braga', true),
-  ('Inês Martins', '2009-06-18', 'Paralisia cerebral', 'Centro Hospitalar Universitário do Porto', true),
-  ('Pedro Rocha', '2013-10-09', 'Deficiência visual congénita', 'Hospital Garcia de Orta', true),
-  ('Beatriz Almeida', '2011-02-12', 'Doença de Crohn', 'Hospital de Faro', false),
-  ('Miguel Tavares', '2007-08-30', 'Doença cardíaca congénita', 'Hospital CUF Descobertas', true),
-  ('Sofia Mendes', '2017-12-01', 'Atraso no desenvolvimento', 'Hospital de Setúbal', true),
-  ('Luís Costa', '2018-04-20', 'Transtorno do espectro autista', 'Hospital de Évora', true),
-  ('Clara Martins', '2019-05-15', 'Síndrome de Down', 'Hospital de Vila Nova de Gaia', true),
-  ('André Santos', '2020-08-10', 'Deficiência auditiva severa', 'Hospital de Leiria', true),
-  ('Sara Oliveira', '2021-11-25', 'Doença pulmonar crónica', 'Hospital de Portimão', true),
-  ('Ricardo Gomes', '2022-02-14', 'Transtorno de déficit de atenção', 'Hospital de Santarém', true),
-  ('Laura Pires', '2023-03-30', 'Doença neuromuscular rara', 'Hospital de Viseu', true),
-  ('Filipe Dias', '2014-10-05', 'Transtorno obsessivo-compulsivo', 'Hospital de Castelo Branco', true),
-  ('Helena Sousa', '2015-12-20', 'Esclerose múltipla', 'Hospital de Guarda', true),
-  ('Gonçalo Reis', '2016-09-15', 'Transtorno bipolar', 'Hospital de Ponta Delgada', true),
-  ('Patrícia Martins', '2017-01-10', 'Transtorno de ansiedade generalizada', 'Hospital de Angra do Heroísmo', true),
-  ('Bruno Silva', '2018-03-05', 'Transtorno de personalidade borderline', 'Hospital de Funchal', true),
-  ('Catarina Costa', '2019-06-25', 'Transtorno de estresse pós-traumático', 'Hospital de Horta', true),
-  ('Vasco Almeida', '2020-08-30', 'Transtorno de déficit de atenção e hiperatividade', 'Hospital de Santa Cruz', true),
-  ('Joana Martins', '2021-11-15', 'Transtorno alimentar grave', 'Hospital de Vila Real', true),
-  ('Ricardo Nunes', '2022-02-05', 'Transtorno obsessivo-compulsivo leve', 'Hospital de Bragança', true);
+INSERT INTO patient (name, birth_date, diagnosis, diagnosis_category, hospital, active) VALUES
+  ('Maria Silva', '2015-06-01', 'Doença crónica rara', 'Outros', 'Hospital de Santa Maria', true),
+  ('João Pereira', '2010-09-15', 'Cardiopatia congénita', 'Cardiovascular', 'Hospital de Santa Maria', true),
+  ('Ana Costa', '2012-03-22', 'Diabetes tipo 1', 'Metabólico', 'Hospital Garcia de Orta', true),
+  ('Carlos Nogueira', '2008-11-03', 'Epilepsia', 'Neurológico', 'Hospital de Santa Maria', false),
+  ('Rita Lopes', '2016-07-29', 'Alergia alimentar grave', 'Imunológico', 'Hospital de Santa Maria', true),
+  ('Tiago Fernandes', '2014-01-05', 'Síndrome de Guillain-Barré', 'Neurológico', 'Hospital de Santa Maria', true),
+  ('Inês Martins', '2009-06-18', 'Paralisia cerebral', 'Neurológico', 'Hospital de Santa Maria', true),
+  ('Pedro Rocha', '2013-10-09', 'Deficiência visual congénita', 'Sensorial', 'Hospital Garcia de Orta', true),
+  ('Beatriz Almeida', '2011-02-12', 'Doença de Crohn', 'Gastrointestinal', 'Hospital Garcia de Orta', false),
+  ('Miguel Tavares', '2007-08-30', 'Cardiopatia dilatada', 'Cardiovascular', 'Hospital CUF Descobertas', true),
+  ('Sofia Mendes', '2017-12-01', 'Atraso do desenvolvimento', 'Desenvolvimento', 'Hospital de Setúbal', true),
+  ('Luís Costa', '2018-04-20', 'Autismo severo', 'Neurodesenvolvimento', 'Hospital Garcia de Orta', true),
+  ('Clara Martins', '2019-05-15', 'Síndrome de Down', 'Genético', 'Hospital Garcia de Orta', true),
+  ('André Santos', '2020-08-10', 'Surdez profunda', 'Sensorial', 'Hospital de Leiria', true),
+  ('Sara Oliveira', '2021-11-25', 'Doença pulmonar crónica', 'Respiratório', 'Hospital Garcia de Orta', true),
+  ('Ricardo Gomes', '2022-02-14', 'TDAH', 'Neuropsiquiátrico', 'Hospital Garcia de Orta', true),
+  ('Laura Pires', '2023-03-30', 'Atrofia muscular espinhal', 'Neuromuscular', 'Hospital de Viseu', true),
+  ('Filipe Dias', '2014-10-05', 'Síndrome genético raro', 'Genético', 'Hospital de Viseu', true),
+  ('Helena Sousa', '2015-12-20', 'Epilepsia', 'Neurológico', 'Hospital de Santa Maria', true),
+  ('Gonçalo Reis', '2016-09-15', 'Transtorno bipolar', 'Neuropsiquiátrico', 'Hospital de Viseu', true),
+  ('Patrícia Martins', '2017-01-10', 'Ansiedade grave', 'Neuropsiquiátrico', 'Hospital de Viseu', true),
+  ('Bruno Silva', '2018-03-05', 'Distúrbio de impulsos', 'Neuropsiquiátrico', 'Hospital de Funchal', true),
+  ('Catarina Costa', '2019-06-25', 'Transtorno de stress', 'Neuropsiquiátrico', 'Hospital de Funchal', true),
+  ('Vasco Almeida', '2020-08-30', 'TDAH', 'Neuropsiquiátrico', 'Hospital de Santa Maria', true),
+  ('Joana Martins', '2021-11-15', 'Anorexia nervosa', 'Neuropsiquiátrico', 'Hospital de Vila Real', true),
+  ('Ricardo Nunes', '2022-02-05', 'TOC severo', 'Neuropsiquiátrico', 'Hospital de Vila Real', true);
+
+
 

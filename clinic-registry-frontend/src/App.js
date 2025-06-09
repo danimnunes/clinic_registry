@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Statistics from './pages/Statistics';
 import Register from './pages/Register';
 import { isTokenExpired, getUserRoles, logout } from './utils/auth';
 
@@ -80,6 +81,14 @@ function App() {
             element={
               <RequireAuthAndRole roles={['ROLE_DOCTOR', 'ROLE_ADMIN']}>
                 <Dashboard />
+              </RequireAuthAndRole>
+            }
+          />
+          <Route
+            path="/statistics"
+            element={
+              <RequireAuthAndRole roles={['ROLE_DOCTOR', 'ROLE_ADMIN']}>
+                <Statistics />
               </RequireAuthAndRole>
             }
           />
