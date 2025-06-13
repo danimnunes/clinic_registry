@@ -10,6 +10,7 @@ import {
   Alert,
   Paper
 } from '@mui/material';
+import background from "../images/background.jpg";
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -33,48 +34,62 @@ export default function Login() {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 8 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Login
-        </Typography>
-
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Username"
-            name="username"
-            margin="normal"
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            name="password"
-            type="password"
-            margin="normal"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-          {error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {error}
-            </Alert>
-          )}
-          <Box mt={2}>
-            <Button type="submit" variant="contained" fullWidth>
-              Login
-            </Button>
-          </Box>
-        </form>
-
-        <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-          Don't have an account?  <Link to="/register">Register here</Link>
-        </Typography>
-      </Paper>
-    </Container>
+    <Box
+      sx={{
+        backgroundImage: `url(${background})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Container maxWidth="xs">
+        <Paper elevation={3} sx={{ padding: 4, marginTop: 8 }}>
+          <Typography variant="h5" align="center" gutterBottom>
+            Login
+          </Typography>
+  
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Username"
+              name="username"
+              margin="normal"
+              value={form.username}
+              onChange={handleChange}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              name="password"
+              type="password"
+              margin="normal"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error}
+              </Alert>
+            )}
+            <Box mt={2}>
+              <Button type="submit" variant="contained" fullWidth>
+                Login
+              </Button>
+            </Box>
+          </form>
+  
+          <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+            Don't have an account? <Link to="/register">Register here</Link>
+          </Typography>
+        </Paper>
+      </Container>
+    </Box>
   );
+  
 }

@@ -37,14 +37,15 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("SELECT p.active, COUNT(p) FROM Patient p GROUP BY p.active")
     List<Object[]> countByActive();
 
-    @Query("SELECT p FROM Patient p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    List<Patient> findByHospital(String hospital);
+    @Query("SELECT p FROM Patient p WHERE LOWER(p.hospital) = LOWER(:hospital)")
+    List<Patient> findByHospital(@Param("hospital") String hospital);
 
     @Query("SELECT p FROM Patient p WHERE p.diagnosis_category = :diagnosis_category")
     List<Patient> findByDiagnosisCategory(@Param("diagnosis_category") String diagnosis_category);
 
     @Query("SELECT p FROM Patient p WHERE p.active = :status")
-    List<Patient> findByActive(String status);
+    List<Patient> findByStatus(@Param("status") Boolean status);
+
 
 }
 

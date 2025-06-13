@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Statistics from './pages/Statistics';
 import Register from './pages/Register';
+import PatientInfo from './pages/PatientInfo';
 import { isTokenExpired, getUserRoles, logout } from './utils/auth';
 
 const theme = createTheme({
@@ -92,6 +93,7 @@ function App() {
               </RequireAuthAndRole>
             }
           />
+          <Route path="/patients/:id" element={<PatientInfo />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
         </Routes>
       </BrowserRouter>

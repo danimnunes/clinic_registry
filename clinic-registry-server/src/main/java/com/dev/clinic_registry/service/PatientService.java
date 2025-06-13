@@ -1,9 +1,12 @@
 package com.dev.clinic_registry.service;
 
 
+import com.dev.clinic_registry.dto.NoteDTO;
 import com.dev.clinic_registry.dto.PatientWindowDTO;
 import com.dev.clinic_registry.dto.StatisticResponse;
+import com.dev.clinic_registry.model.Note;
 import com.dev.clinic_registry.model.Patient;
+import com.dev.clinic_registry.repository.NoteRepository;
 import com.dev.clinic_registry.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +19,11 @@ import java.util.stream.Collectors;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final NoteRepository noteRepository;
 
     @Autowired
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
         this.patientRepository = patientRepository;
     }
 
@@ -106,12 +111,19 @@ public class PatientService {
                 .toList();
     }
     
-    public List<PatientWindowDTO> getPatientsByStatus(String status) {
-        return patientRepository.findByActive(status)
+    public List<PatientWindowDTO> getPatientsByStatus(Boolean status) {
+        return patientRepository.findByStatus(status)
                 .stream()
                 .map(PatientWindowDTO::fromEntity)
                 .toList();
     }
+
+    public List<NoteDTO> getNotesForPatient(Long patientId) {
+        List<Note> notes = noteRepository.findByPatientIdWithAuthor(patientId);
+        return notes.stream()
+                    .map(NoteDTO::new)
+                    .collect(Collectors.toList());
+    }    
     
 }
 

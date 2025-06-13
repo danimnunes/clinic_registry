@@ -1,7 +1,12 @@
 package com.dev.clinic_registry.model;
 
 import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "cr_user")
@@ -20,6 +25,10 @@ public class User {
         joinColumns = @JoinColumn(name = "cr_user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> author_notes;
 
     // Getters and Setters
     public Long getId() {
@@ -45,6 +54,13 @@ public class User {
     }
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+    @JsonManagedReference
+    public List<Note> getAuthor_notes() {
+        return author_notes;
+    }
+    public void setAuthor_notes(List<Note> author_notes) {
+        this.author_notes = author_notes;
     }
 }
 

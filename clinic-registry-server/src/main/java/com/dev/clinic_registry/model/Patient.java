@@ -2,6 +2,10 @@ package com.dev.clinic_registry.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 public class Patient {
@@ -17,6 +21,14 @@ public class Patient {
     private String diagnosis_category;
     private String hospital;
     private boolean active;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HealthRecord> clinicalHistory;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Note> notes;
 
     public Patient() {}
 
@@ -43,4 +55,10 @@ public class Patient {
     public void setHospital(String hospital) { this.hospital = hospital; }
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+    @JsonManagedReference
+    public List<HealthRecord> getClinicalHistory() { return clinicalHistory; }
+    public void setClinicalHistory(List<HealthRecord> clinicalHistory) { this.clinicalHistory = clinicalHistory; }
+    @JsonManagedReference
+    public List<Note> getNotes() { return notes; }
+    public void setNotes(List<Note> notes) { this.notes = notes; }
 }

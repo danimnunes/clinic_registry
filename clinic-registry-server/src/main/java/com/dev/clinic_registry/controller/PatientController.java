@@ -1,10 +1,13 @@
 package com.dev.clinic_registry.controller;
 
 
+import com.dev.clinic_registry.dto.NoteDTO;
 import com.dev.clinic_registry.dto.PatientWindowDTO;
 import com.dev.clinic_registry.dto.StatisticResponse;
 import com.dev.clinic_registry.model.Patient;
 import com.dev.clinic_registry.service.PatientService;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -101,20 +104,33 @@ public class PatientController {
     }
 
     @GetMapping("/by-hospital")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
     public ResponseEntity<List<PatientWindowDTO>> getPatientsByHospital(@RequestParam String hospital) {
         List<PatientWindowDTO> patients = patientService.getPatientsByHospital(hospital);
         return ResponseEntity.ok(patients);
     }
 
     @GetMapping("/by-diagnosis-category")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
     public ResponseEntity<List<PatientWindowDTO>> getPatientsByDiagnosisCategory(@RequestParam String diagnosis_category) {
         List<PatientWindowDTO> patients = patientService.getPatientsByDiagnosisCategory(diagnosis_category);
         return ResponseEntity.ok(patients);
     }
 
     @GetMapping("/by-status")
-    public ResponseEntity<List<PatientWindowDTO>> getPatientsByStatus(@RequestParam String status) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<List<PatientWindowDTO>> getPatientsByStatus(@RequestParam Boolean status) {
         List<PatientWindowDTO> patients = patientService.getPatientsByStatus(status);
         return ResponseEntity.ok(patients);
+    }
+
+    @GetMapping("/{id}/notes")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<List<NoteDTO>> getNotesForPatient(@PathVariable Long id) {
+        List<NoteDTO> notes = patientService.getNotesForPatient(id);
+        for (NoteDTO note : notes) {
+            System.out.println("Note ID: " + note.getId() + ", Author: " + note.getAuthorUsername() + ", Date: " + note.getNoteDate());
+        }
+        return ResponseEntity.ok(notes);
     }
 }
