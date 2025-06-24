@@ -27,11 +27,11 @@ Sensitive fields (e.g., name, diagnosis) encrypted using AES on the backend, and
 
 Backend: Spring Boot, Spring Security, JPA, JWT
 
-Frontend: React, React Router, Material UI
+Frontend: React, Material UI
 
 Database: PostgreSQL
 
-Tooling: Maven, Node.js, Axios, ESLint, Prettier
+Tooling: Maven, Node.js
 
 ## 1. Demo
 
